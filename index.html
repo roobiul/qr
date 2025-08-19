@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL & QR By Roobiul</title>
+    <link rel="icon" type="image/png" href="logo.png">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: url("new.jpg");
+            background-size: cover;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            width: 400px;
+            color: #fff;
+            text-align: center;
+        }
+
+        input,
+        button {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 10px;
+            outline: none;
+        }
+
+        input {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+        }
+
+        button {
+            background: rgba(0, 0, 0, 0.6);
+            color: #fff;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+        a {
+            color: #00ffcc;
+            word-break: break-all;
+        }
+
+        #output,
+        #qrResult {
+            margin-top: 15px;
+            display: none;
+        }
+
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+            padding: 10px 0;
+            backdrop-filter: blur(12px);
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-size: 14px;
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>URL Shortener</h2>
+        <input type="text" id="longUrl" placeholder="Enter long URL here...">
+        <button onclick="shortenUrl()">Shorten URL</button>
+        <div id="output"></div>
+        <button id="copyBtn" style="display:none;" onclick="copyUrl()">Copy Short URL</button>
+
+        <hr style="margin:20px 0; border:1px solid rgba(255,255,255,0.2);">
+
+        <h2>QR Code Generator</h2>
+        <input type="text" id="qrInput" placeholder="Enter text or URL...">
+        <button onclick="generateQR()">Generate QR</button>
+        <div id="qrResult"></div>
+        <button id="downloadBtn" style="display:none;" onclick="downloadQR()">Download QR PNG</button>
+        
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
+    <script>
+        let shortUrl = "";
+        let qr;
+
+        function shortenUrl() {
+            let url = document.getElementById("longUrl").value;
+            if (!url) return alert("Please enter a URL!");
+
+            fetch(`https://tinyurl.com/api-create.php?url=${encodeURIComponent(url)}`)
+                .then(response => response.text())
+                .then(shortenedURL => {
+                    shortUrl = shortenedURL;
+                    let outputDiv = document.getElementById("output");
+                    outputDiv.style.display = "block";
+                    outputDiv.innerHTML = `<p>Shortened URL:</p><a href="${shortenedURL}" target="_blank">${shortenedURL}</a>`;
+                    document.getElementById("copyBtn").style.display = "block";
+                })
+                .catch(error => {
+                    alert("Error shortening URL. Try again!");
+                    console.error(error);
+                });
+        }
+
+        function copyUrl() {
+            if (!shortUrl) return;
+            navigator.clipboard.writeText(shortUrl)
+                .then(() => alert("Copied to clipboard!"))
+                .catch(err => console.error("Failed to copy", err));
+        }
+
+        function generateQR() {
+            let text = document.getElementById("qrInput").value;
+            if (!text) return alert("Please enter text or URL!");
+
+            document.getElementById("qrResult").innerHTML = "";
+            qr = new QRCode(document.getElementById("qrResult"), {
+                text: text,
+                width: 200,
+
+                height: 200,
+                colorDark: "#000000",
+                colorLight: "#00000000",
+            });
+            document.getElementById("qrResult").style.display = "block";
+            document.getElementById("downloadBtn").style.display = "block";
+        }
+
+        function downloadQR() {
+            let canvas = document.querySelector("#qrResult canvas");
+            let link = document.createElement("a");
+            link.download = "qr_code.png";
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+    </script>
+
+</body>
+<footer>
+  <p>© 2025 Md Robiul Islam | CSE, JSTU</p>
+</footer>
+
+</html>
