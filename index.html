@@ -43,7 +43,7 @@
 
         input {
             background: rgba(255, 255, 255, 0.2);
-            color: #fff;
+            color: #ffffffff;
         }
 
         button {
@@ -67,6 +67,40 @@
             margin-top: 15px;
             display: none;
         }
+		#downloadBtn {
+    width: 100%;
+    padding: 12px;
+    margin-top: 12px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(90deg, #0D1164, #EA2264);
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+#downloadBtn:hover {
+    background: linear-gradient(90deg, #EA2264, #0D1164);
+}
+
+/* Prevent footer overlap on phones */
+.container {
+    margin-bottom: 80px; /* give space for footer */
+}
+
+/* Responsive for small screens */
+@media (max-width: 480px) {
+    .container {
+        width: 90%;
+        padding: 20px;
+    }
+
+    #qrResult canvas {
+        width: 180px !important;
+        height: 180px !important;
+    }
+}
 
         footer {
             position: fixed;
@@ -178,5 +212,6 @@
 
 
 </html>
+
 
 
