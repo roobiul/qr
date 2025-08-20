@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>URL & QR By Roobiul</title>
+    <title>QR Generator - By Roobiul</title>
     <link rel="icon" type="image/png" href="logo.png">
     <style>
         body {
@@ -22,7 +22,7 @@
         .container {
             background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(10px);
-            padding: 40px;
+            padding: 30px;
             border-radius: 20px;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
             width: 400px;
@@ -30,29 +30,53 @@
             text-align: center;
         }
 
-        h1 {
-            margin-bottom: 30px;
-            font-size: 28px;
-        }
-
-        .option-btn {
+        input,
+        button {
             width: 100%;
-            padding: 15px;
-            margin: 15px 0;
+            padding: 12px;
+            margin: 8px 0;
             border: none;
             border-radius: 10px;
             outline: none;
-            background: linear-gradient(90deg, #0D1164, #EA2264);
+        }
+
+        input {
+            background: rgba(255, 255, 255, 0.2);
+            color: #ffffffff;
+        }
+
+        button {
+            background: rgba(0, 0, 0, 0.6);
             color: #fff;
-            font-size: 18px;
-            font-weight: bold;
             cursor: pointer;
             transition: 0.3s;
         }
 
-        .option-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        button:hover {
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+        #qrResult {
+            margin-top: 15px;
+            display: none;
+        }
+
+        #downloadBtn {
+            width: 100%;
+            padding: 12px;
+            margin-top: 12px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(90deg, #0D1164, #EA2264);
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            display: none;
+        }
+
+        #downloadBtn:hover {
+            background: linear-gradient(90deg, #EA2264, #0D1164);
         }
 
         .back-btn {
@@ -86,7 +110,12 @@
         @media (max-width: 480px) {
             .container {
                 width: 90%;
-                padding: 30px 20px;
+                padding: 20px;
+            }
+
+            #qrResult canvas {
+                width: 180px !important;
+                height: 180px !important;
             }
         }
     </style>
@@ -94,10 +123,43 @@
 
 <body>
     <div class="container">
-        <h1>Choose an Option</h1>
-        <button class="option-btn" onclick="location.href='qr.html'">QR Code Generator</button>
-        <button class="option-btn" onclick="location.href='url.html'">URL Shortener</button>
+        <h2>QR Code Generator</h2>
+        <input type="text" id="qrInput" placeholder="Enter text or URL...">
+        <button onclick="generateQR()">Generate QR</button>
+        <div id="qrResult"></div>
+        <button id="downloadBtn" onclick="downloadQR()">Download QR PNG</button>
+        
+        <a href="index.html" class="back-btn">Back to Home</a>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
+    <script>
+        let qr;
+
+        function generateQR() {
+            let text = document.getElementById("qrInput").value;
+            if (!text) return alert("Please enter text or URL!");
+
+            document.getElementById("qrResult").innerHTML = "";
+            qr = new QRCode(document.getElementById("qrResult"), {
+                text: text,
+                width: 200,
+                height: 200,
+                colorDark: "#000000",
+                colorLight: "#00000000",
+            });
+            document.getElementById("qrResult").style.display = "block";
+            document.getElementById("downloadBtn").style.display = "block";
+        }
+
+        function downloadQR() {
+            let canvas = document.querySelector("#qrResult canvas");
+            let link = document.createElement("a");
+            link.download = "qr_code.png";
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+    </script>
 
     <footer>
         <p>© 2025 Md Robiul Islam | CSE, JSTU</p>
