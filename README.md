@@ -6,6 +6,10 @@ A modern web application that allows users to shorten long URLs and generate QR 
 Shorten long URLs using the TinyURL API
 Copy shortened URLs to clipboard with one click
 Clean, user-friendly interface
+## 🚀 Live Demo
+
+[View Live Demo](https://roobiul.github.io/qr/)
+
 
 📱 QR Code Generator
 Generate QR codes for any text or URL
